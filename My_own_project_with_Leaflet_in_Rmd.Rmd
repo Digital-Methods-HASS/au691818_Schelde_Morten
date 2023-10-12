@@ -1,0 +1,50 @@
+---
+title: "Data for my own project"
+author: "Morten Aaboe Schelde"
+date: "2023-10-12"
+output: html_document
+---
+# The purpose of this .rmd-file is to make an interactive map (with leaflet) of my grandmother's different addresses through the ages.
+
+## The first step is to install the necessary packages.
+
+```{r}
+library(tidyverse)
+library(googlesheets4)
+library(leaflet)
+```
+
+### I downloaded the Google Sheet file as a csv-file because of problems about reading the Google Sheet file via the URL.
+
+```{bash}
+Locations <- read_csv("KTJ - Ark1.csv")
+
+```
+
+#### Then, I separated the column "Coordinates" into two separate columns called "Latitude" and "Longitude" respectively.
+
+```{bash}
+glimpse(Locations)
+
+Locations <- separate(Locations, Coordinates, into = c("Latitude", "Longitude"), sep = ",")
+```
+
+##### R thought that the columns "Latitude" and "Longitude" were characters. Therefor, I defined them as numerics. 
+
+```{bash}
+Locations$Latitude <- as.numeric(Locations$Latitude)
+Locations$Longitude <- as.numeric(Locations$Longitude)
+```
+
+###### Now, it is time for clustering the different icons which is smart because my grandmother lived on two different addresses in Ribe. Clustering can simplify it and make it more clear to look at the map. Furthermore, I changed the shape and color of the icons. Now, they are red circles. 
+
+```{bash}
+leaflet() %>% 
+  addTiles() %>% 
+  addCircleMarkers(lng = Locations$Longitude,
+             lat = Locations$Latitude,
+             popup = Locations$Description, clusterOptions = markerClusterOptions(),
+             color = "red")
+```
+
+###### I would like to acknowledge Gustav for his assistance in Hacky Hours. 
