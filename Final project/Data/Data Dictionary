@@ -1,0 +1,12 @@
+This is my data dictionary, in which I explain the different columns in my Excel- and CVS-files. 
+My files consist of 10 different columns:
+Data_birth: The date of birth, written in the ISO-format, YYYY-MM-DD. 
+Date_baptism: This category is more complex. It means three different things: 1) The date of baptism in the church, 2) The date of the private baptism, or 3) The date of the affirmation of the private baptism, all of these are written in the ISO-format, YYYY-MM-DD. 
+Name_child: The full name of the child
+Name_father: The full name of the father
+Name_mother: The full name of the mother, inclusive her maiden name
+Occupation_father: The occupation of the father 
+Family_ID: The number of the family, the purpose of this is systematizing the families.
+Residence_parish: The parish of residence of the family 
+Notes: In this, I note if the child was privately baptized. Furthermore, I note if the “Date_baptism” was the date of affirmation of the private baptism. 
+Page: The reference to the parish register
