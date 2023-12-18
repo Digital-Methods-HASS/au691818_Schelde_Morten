@@ -1,0 +1,109 @@
+---
+title: "Sveistrups_Sønderjyder"
+author: "Morten Aaboe Schelde"
+date: "2023-12-18"
+output: html_document
+---
+
+## Loading libraries and the CSV-file
+
+First, I load the necessary libraries. Because of the date format in the csv-file, I will need the package called "lubridate". Furthermore, I load the package called "ggplot2" which is very important if you want to make visualizations. Then, I read the csv-file. 
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(ggplot2)
+
+Sveistrups_Sønderjyder <- read.csv2("data/Sveistrup_forenklet_UTF8.csv")
+
+```
+
+## Separating the date of baptism into year, month and day
+
+Before working with the data, I must look at the date format. Because of the ISO 8601 format, the dates are written as YYYY-MM-DD. I am interested in the years. Therefor, I must split these dates into year, month and day.
+
+```{r}
+Sveistrups_Sønderjyder$Date_baptism <- as.Date(Sveistrups_Sønderjyder$Date_baptism)
+
+Sveistrups_Sønderjyder <- Sveistrups_Sønderjyder %>% 
+  separate(Date_baptism, into = c("year","month","day"), sep="-")
+
+```
+
+## Counting and visualizing
+
+Now, it is time for working with the data and investigate the research questions.
+
+
+Counting the number of baptized children
+
+The first question is: How many children were baptized by Sveistrup? 
+To answer this, I count all the children. 
+
+```{r}
+
+count(Sveistrups_Sønderjyder)
+
+```
+
+
+Counting the number of baptized children in each year
+
+Now, I would like to know how many children were baptized in each year.
+Therefor, I count, again! A visualization of this could be very useful as an image in the project report. Therefor, I use the function "ggplot" to visualize this. With the continued function "geom_col", I can change the aesthetics of the visualization, e.g. the x and y-axes respectively.
+Then, I change the titles of the axes. Furthermore, I change the scale on the y-axis to make the scale of the y-axis more clear to read. 
+
+```{r}
+
+Sveistrups_Sønderjyder %>% 
+  count(year) %>% 
+  ggplot()+
+  geom_col(aes(x=year, y=n))+
+  labs(title = "Baptized children pr. year, 1870-1874", x = "Year", y = "Baptized children")+
+  scale_y_continuous(breaks = c(0,2,4,6,8,10,12))
+
+```
+
+
+Counting the number of families 
+
+Now, I count the number of families who left the state church to answer my third research question. 
+
+```{r}
+
+Sveistrups_Sønderjyder %>% 
+  count(Family_ID)
+```
+
+Counting and visualizing the occupations of the fathers
+
+"Which occupations did the fathers have?" That is my fourth research question. Again, I use the ggplot-function to visualize. In this case, I change the titles of the axes and the scale of the y-axis - as in line 53-54. Furthermore, I set a limit for this scale, between 0 and 30. I also changed the sequence. Therefor it is counted by every second number. 
+
+```{r}
+
+Sveistrups_Sønderjyder %>% 
+  count(Occupation_father) %>% 
+  ggplot()+
+  geom_col(aes(x=Occupation_father, y=n))+
+  labs(title = "The occupations of the fathers", x = "Occupation", y = "Count")+
+  scale_y_continuous(limits=c(0,30), breaks = seq(0, 30, by =2))
+
+```
+
+Counting and visualizing the residences of the families
+
+Now, I count the residences of the families. These are registered as the parishes. 
+Again, I change the aesthetics of the visualization. 
+
+```{r}
+
+Sveistrups_Sønderjyder %>% 
+  count(Residence_parish) %>% 
+  ggplot()+
+  geom_col(aes(x=Residence_parish, y=n))+
+  labs(title = "The residences of the families", x = "Parish", y = "Count")+
+  scale_y_continuous(limits = c(0,20), breaks = seq(0, 20, by =2))
+
+```
+
+
